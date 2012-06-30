@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{44306352-200E-49C9-94D9-0D054989DCC5}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Genetic</RootNamespace>
+    <AssemblyName>Genetic</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Genetic\Individual.cs" />
+    <Compile Include="Genetic\Problem.cs" />
+    <Compile Include="Genetic\ProblemSet.cs" />
+    <Compile Include="Genetic\Evolution.cs" />
+    <Compile Include="Genetic\Population.cs" />
+    <Compile Include="Genetic\Programming\ExpressionTree.cs" />
+    <Compile Include="Genetic\Programming\Terminal.cs" />
+    <Compile Include="Genetic\Programming\Function.cs" />
+    <Compile Include="Genetic\Programming\ExpressionTreeFactory.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\Int2Function.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\Addition.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\Multiplication.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\Division.cs" />
+    <Compile Include="Genetic\Programming\Genome\Expression.cs" />
+    <Compile Include="Genetic\Programming\Genome\Gene.cs" />
+    <Compile Include="Genetic\Programming\Genome\ExpressionFactory.cs" />
+    <Compile Include="Genetic\Programming\Genome\Chromosome.cs" />
+    <Compile Include="Genetic\Programming\Constant.cs" />
+    <Compile Include="Genetic\Programming\Input.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\Subtraction.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\PointProblem.cs" />
+    <Compile Include="Genetic\Programming\Genome\ConstantExpression.cs" />
+    <Compile Include="Genetic\IMeasurable.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\Conditional.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\Maximum.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\Minimum.cs" />
+    <Compile Include="Genetic\Programming\Arithmetic\Modulo.cs" />
+    <Compile Include="Genetic\Programming\ComputationContext.cs" />
+    <Compile Include="Genetic\Programming\Stack\Push.cs" />
+    <Compile Include="Genetic\Programming\Stack\Pop.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Genetic\" />
+    <Folder Include="Genetic\Programming\" />
+    <Folder Include="Genetic\Programming\Genome\" />
+    <Folder Include="Genetic\Programming\Stack\" />
+  </ItemGroup>
+</Project>

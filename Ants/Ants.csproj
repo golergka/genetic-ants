@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{29E3DC27-83EF-4551-B9ED-D8007F972FFA}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Ants</RootNamespace>
+    <AssemblyName>Ants</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Field\Field.cs" />
+    <Compile Include="Field\FieldObject.cs" />
+    <Compile Include="Field\FieldController\FieldController.cs" />
+    <Compile Include="Field\FieldController\FieldEvent.cs" />
+    <Compile Include="Ant\Ant.cs" />
+    <Compile Include="Ant\RandomAntBrain.cs" />
+    <Compile Include="Ant\AntNavigationContext.cs" />
+    <Compile Include="Ant\SimpleAntBrain.cs" />
+    <Compile Include="Field\Spawn.cs" />
+    <Compile Include="Ant\Carcass.cs" />
+    <Compile Include="Field\Objects\Fire.cs" />
+    <Compile Include="Geometry\Point.cs" />
+    <Compile Include="Geometry\MoveDirection.cs" />
+    <Compile Include="Field\LookSystem.cs" />
+    <Compile Include="Field\FieldSystem.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Field\" />
+    <Folder Include="Ant\" />
+    <Folder Include="Field\Objects\" />
+    <Folder Include="Geometry\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Genetic\Genetic.csproj">
+      <Project>{44306352-200E-49C9-94D9-0D054989DCC5}</Project>
+      <Name>Genetic</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

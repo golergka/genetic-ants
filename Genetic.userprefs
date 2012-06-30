@@ -1,0 +1,41 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Ants/Field/Field.cs">
+    <Files>
+      <File FileName="Ants/Ant/AntNavigationContext.cs" Line="10" Column="19" />
+      <File FileName="Ants/Field/Field.cs" Line="151" Column="3" />
+      <File FileName="Ants/Field/Objects/Grass.cs" Line="58" Column="36" />
+      <File FileName="Ants/Main.cs" Line="15" Column="42" />
+      <File FileName="Ants/Field/Objects/Water.cs" Line="112" Column="1" />
+      <File FileName="Ants/Ant/Ant.cs" Line="67" Column="50" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Ants" expanded="True">
+            <Node name="References" expanded="True" />
+            <Node name="Ant" expanded="True" />
+            <Node name="Field" expanded="True">
+              <Node name="FieldController" expanded="True" />
+              <Node name="Objects" expanded="True" />
+              <Node name="Field.cs" selected="True" />
+            </Node>
+          </Node>
+          <Node name="CurveFitting" expanded="True" />
+          <Node name="Genetic" expanded="True">
+            <Node name="Genetic" expanded="True">
+              <Node name="Programming" expanded="True">
+                <Node name="Genome" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+          <Node name="StringExample" expanded="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
