@@ -3,30 +3,26 @@ using System.Collections.Generic;
 
 namespace Ants
 {
-	public class Field
+	public class Field : VectorSystem
 	{
 		
 		private List<FieldObject> objects = new List<FieldObject>();
 		public readonly List<List<List<FieldObject>>> objectsOnField = new List<List<List<FieldObject>>>();
 
 		public int [,] height;
-		public int [,] water;
+		// public int [,] water;
 		public int [,] grass;
+
+		public WaterSystem water;
 		
-		public readonly int xSize;
-		public readonly int ySize;
 		
-		static Random rnd = new Random();
 		
 		/*
 		 * Global
 		 */
 		
-		public Field (int xSize = 40, int ySize = 120)
+		public Field (int xSize = 40, int ySize = 120) : base (xSize, ySize)
 		{
-			
-			this.xSize = xSize;
-			this.ySize = ySize;
 			
 			// creating object table
 			
@@ -44,8 +40,10 @@ namespace Ants
 			
 			// creating water
 			
-			water = new int[xSize, ySize];
-			GenerateWater ();
+			// water = new int[xSize, ySize];
+			// GenerateWater ();
+
+			water = new WaterSystem(this);
 			
 			// creating grass table
 			
@@ -60,11 +58,14 @@ namespace Ants
 			
 		}
 		
-		public void Turn ()
+		override public void Turn ()
 		{
 			
 			// water flows
-			WaterFlow ();
+			// WaterFlow ();
+
+			water.Turn();
+
 			// grass grows
 			GrassSpawn ();
 			GrassGrow ();
@@ -83,41 +84,6 @@ namespace Ants
 			foreach (FieldObject fieldObject in objects)
 				objectsOnField [fieldObject.x] [fieldObject.y].Add (fieldObject);
 			
-		}
-		
-		/*
-		 * Coordinates
-		 */
-		
-		public int randomX ()
-		{
-			return rnd.Next (0, xSize);
-		}
-		
-		public int randomY ()
-		{
-			return rnd.Next (0, ySize);
-		}
-		
-		public Point randomPoint ()
-		{
-			return new Point (randomX (), randomY ());
-		}
-		
-		public bool Validate (int x, int y)
-		{
-			if ((x < 0) ||
-				(y < 0) ||
-				(x >= xSize) ||
-				(y >= ySize))
-				return false;
-			else
-				return true;
-		}
-		
-		public bool Validate (Point point)
-		{
-			return this.Validate (point.x, point.y);
 		}
 		
 		/*
@@ -217,185 +183,157 @@ namespace Ants
 			
 		}
 		
-		public int HeightAt (Point p)
+		public int HeightAt(int x, int y)
 		{
-			if (this.Validate (p))
-				return height [p.x, p.y];
+			
+			if (this.Validate(x,y))
+				return height [x,y];
 			else
 				return 0;
+			
+		}
+		
+		public int HeightAt (Point p)
+		{
+			return this.HeightAt(p.x, p.y);
 		}
 		
 		/*
 		 * Water
 		 */
 		
-		const int WATER_DROP_AMOUNT = 10;
-		const int WATER_DROP_MIN = 400;
-		const int WATER_DROP_MAX = 500;
-		const int WATER_INIT_LIMIT = 100;
-		const int WATER_MAX_DELTA = 0;
+		// const int WATER_DROP_AMOUNT = 10;
+		// const int WATER_DROP_MIN = 400;
+		// const int WATER_DROP_MAX = 500;
+		// const int WATER_INIT_LIMIT = 100;
+		// const int WATER_MAX_DELTA = 0;
 		
-		private void GenerateWater ()
-		{
+		// private void GenerateWater ()
+		// {
 			
-			for (int i=0; i<WATER_DROP_AMOUNT; i++) {
+		// 	for (int i=0; i<WATER_DROP_AMOUNT; i++) {
 			
-				int size = rnd.Next (WATER_DROP_MIN, WATER_DROP_MAX);
-				water [randomX (), randomY ()] = size;
+		// 		int size = rnd.Next (WATER_DROP_MIN, WATER_DROP_MAX);
+		// 		water [randomX (), randomY ()] = size;
 				
-			}
+		// 	}
 			
-			for (int i=0; i<WATER_INIT_LIMIT; i++)
-				if (!WaterFlow ())
-					break;
+		// 	for (int i=0; i<WATER_INIT_LIMIT; i++)
+		// 		if (!WaterFlow ())
+		// 			break;
 			
-		}
+		// }
 		
-		private int SurfaceLevel (int x, int y)
-		{
-			return height [x, y] + water [x, y];
-		}
+		// private int SurfaceLevel (int x, int y)
+		// {
+		// 	return height [x, y] + water [x, y];
+		// }
 		
-		private class Flow {
+		// private Flow CalculateFlowFrom (int x, int y)
+		// {
+		// 	Flow result = new Flow ();
 			
-			public int flowAmount = 0;
-			public int [,] flowDirection = new int [3,3];
-			
-			private int DirectionSum ()
-			{
-				
-				int result = 0;
-				
-				for (int i=0; i<3; i++)
-					for (int j=0; j<3; j++)
-						result += flowDirection [i, j];
-				
-				return result;
-				
-			}
-			
-			public int[,] NormalizedFlow ()
-			{
-				
-				int[,] result = new int[3, 3];
-				int sum = DirectionSum ();
-				
-				
-				if (sum>0)
-					for (int i=0; i<3; i++)
-						for (int j=0; j<3; j++)
-							result [i, j] = Convert.ToInt32 (
-								(double)flowAmount
-								*
-								(
-									(double)flowDirection[i,j] / (double)sum
-								)
-								);
-				
-				return result;
-				
-			}
-			
-		}
-		
-		private Flow CalculateFlowFrom (int x, int y)
-		{
-			Flow result = new Flow ();
-			
-			for (int i=0; i<3; i++) {
-				for (int j=0; j<3; j++) {
+		// 	for (int i=0; i<3; i++) {
+		// 		for (int j=0; j<3; j++) {
 					
-					int xd = i + x - 1;
-					int yd = j + y - 1;
+		// 			int xd = i + x - 1;
+		// 			int yd = j + y - 1;
 					
-					if (Validate (xd, yd)) {
+		// 			if (Validate (xd, yd)) {
 						
-						if (SurfaceLevel (x, y) > SurfaceLevel (xd, yd) + WATER_MAX_DELTA) {
+		// 				if (SurfaceLevel (x, y) > SurfaceLevel (xd, yd) + WATER_MAX_DELTA) {
 							
-							int delta = SurfaceLevel (x, y) - SurfaceLevel (xd, yd);
-							result.flowDirection [i, j] = delta;
-							result.flowAmount = Math.Max (result.flowAmount, delta);
+		// 					int delta = SurfaceLevel (x, y) - SurfaceLevel (xd, yd);
+		// 					result.flowDirection [i, j] = delta;
+		// 					result.flowAmount = Math.Max (result.flowAmount, delta);
 							
-						}
+		// 				}
 						
-					}
+		// 			}
 					
-				}
-			}
+		// 		}
+		// 	}
 			
-			return result;
+		// 	return result;
 			
-		}
+		// }
 		
-		// returns true if something flowed
-		private bool PerformFlowFrom (int x, int y, Flow flow)
+		// // returns true if something flowed
+		// private bool PerformFlowFrom (int x, int y, Flow flow)
+		// {
+			
+		// 	bool result = false;
+		
+		// 	int[,] normalizedFlow = flow.NormalizedFlow ();
+			
+		// 	for (int i=0; i<3; i++) {
+		// 		for (int j=0; j<3; j++) {
+					
+		// 			int xd = i + x - 1;
+		// 			int yd = j + y - 1;
+					
+		// 			int flowThere = normalizedFlow [i, j];
+					
+		// 			if (flowThere > 0) {
+						
+		// 				result = true;
+		// 				water [xd, yd] += flowThere;
+		// 				water [x, y] -= flowThere;
+						
+		// 			}
+		// 		}
+		// 	}
+			
+		// 	return result;
+			
+		// }
+		
+		// private bool WaterFlow ()
+		// {
+			
+		// 	bool result = false;
+			
+		// 	Flow[,] flows = new Flow[xSize, ySize];
+			
+		// 	// calculating where the water will flow
+			
+		// 	for (int x=0; x<xSize; x++) {
+		// 		for (int y=0; y<ySize; y++) {
+		// 			if (water [x, y] > 0) {
+		// 				flows [x, y] = CalculateFlowFrom (x, y);
+		// 			}
+		// 		}
+		// 	}
+			
+		// 	// performing the water flow
+			
+		// 	for (int x=0; x<xSize; x++) {
+		// 		for (int y=0; y<ySize; y++) {
+		// 			if (water [x, y] > 0) {
+						
+		// 				result = result || PerformFlowFrom (x, y, flows [x, y]);
+						
+		// 			}
+		// 		}
+		// 	}
+			
+		// 	return result;
+			
+		// }
+		
+		public int WaterAt(int x, int y)
 		{
-			
-			bool result = false;
-		
-			int[,] normalizedFlow = flow.NormalizedFlow ();
-			
-			for (int i=0; i<3; i++) {
-				for (int j=0; j<3; j++) {
-					
-					int xd = i + x - 1;
-					int yd = j + y - 1;
-					
-					int flowThere = normalizedFlow [i, j];
-					
-					if (flowThere > 0) {
-						
-						result = true;
-						water [xd, yd] += flowThere;
-						water [x, y] -= flowThere;
-						
-					}
-				}
-			}
-			
-			return result;
-			
-		}
-		
-		private bool WaterFlow ()
-		{
-			
-			bool result = false;
-			
-			Flow[,] flows = new Flow[xSize, ySize];
-			
-			// calculating where the water will flow
-			
-			for (int x=0; x<xSize; x++) {
-				for (int y=0; y<ySize; y++) {
-					if (water [x, y] > 0) {
-						flows [x, y] = CalculateFlowFrom (x, y);
-					}
-				}
-			}
-			
-			// performing the water flow
-			
-			for (int x=0; x<xSize; x++) {
-				for (int y=0; y<ySize; y++) {
-					if (water [x, y] > 0) {
-						
-						result = result || PerformFlowFrom (x, y, flows [x, y]);
-						
-					}
-				}
-			}
-			
-			return result;
-			
-		}
-		
-		public int WaterAt (Point p)
-		{
-			if (Validate (p))
-				return water [p.x, p.y];
+			if (Validate (x,y))
+				return water.Value(x,y);
 			else
 				return 0;
+		}
+
+		public int WaterAt (Point p)
+		{
+			
+			return WaterAt(p.x, p.y);
+
 		}
 		
 		/*
@@ -414,7 +352,7 @@ namespace Ants
 				int newX = randomX ();
 				int newY = randomY ();
 				
-				if (water [newX, newY] == 0 && grass [newX, newY] < GRASS_DENSITY_LIMIT)
+				if (WaterAt(newX, newY) == 0 && grass [newX, newY] < GRASS_DENSITY_LIMIT)
 					grass [newX, newY]++;
 				
 			}
@@ -434,7 +372,7 @@ namespace Ants
 						int newY = y + rnd.Next (-GRASS_GROW_DISTANCE, 1 + GRASS_GROW_DISTANCE);
 						
 						if (Validate (newX, newY))
-						if (water [newX, newY] == 0)
+						if (WaterAt(newX, newY) == 0)
 						if (grass [newX, newY] < GRASS_DENSITY_LIMIT)
 							grass [newX, newY] ++;
 						
@@ -478,27 +416,7 @@ namespace Ants
 		public void BufferWater ()
 		{
 			
-			for (int x=0; x<xSize; x++) {
-				for (int y=0; y<ySize; y++) {
-					
-					int w = water [x, y];
-					char c;
-					
-					if (w == 0)
-						continue;
-					else if (w < 3)
-						c = '-';
-					else if (w < 5)
-						c = '~';
-					else if (w < 7)
-						c = '=';
-					else
-						c = '#';
-					
-					buffer [x][y] = c;
-					
-				}
-			}
+			water.Buffer(buffer);
 			
 		}
 		
