@@ -2,30 +2,53 @@ using System;
 
 namespace Ants
 {
-	public class WaterSystem : FieldSystem
+	public class FlowSystem : FieldSystem
 	{
 		
-		const int WATER_DROP_AMOUNT = 10;
-		const int WATER_DROP_MIN = 400;
-		const int WATER_DROP_MAX = 500;
-		const int WATER_INIT_LIMIT = 100;
-		const int WATER_MAX_DELTA = 0;
+		// behavior configuration
+
+		private readonly int dropAmount;
+		private readonly int dropMin;
+		private readonly int dropMax;
+		private readonly int initLimit;
+		private readonly int maxDelta;
+
+		// default values of behavior configuration
+
+		const int DROP_AMOUNT = 10;
+		const int DROP_MIN = 400;
+		const int DROP_MAX = 500;
+		const int INIT_LIMIT = 100;
+		const int MAX_DELTA = 0;
 		
-		public WaterSystem (Field field) : base (field)
+		public FlowSystem (
+			Field field,
+			int dropAmount = DROP_AMOUNT,
+			int dropMin = DROP_MIN,
+			int dropMax = DROP_MAX,
+			int initLimit = INIT_LIMIT,
+			int maxDelta = MAX_DELTA
+			) : base (field)
 		{
+
+			this.dropAmount = dropAmount;
+			this.dropMin = dropMin;
+			this.dropMax = dropMax;
+			this.initLimit = initLimit;
+			this.maxDelta = maxDelta;
 			
 			// dropping initial shafts of water
 			
-			for (int i=0; i<WATER_DROP_AMOUNT; i++) {
+			for (int i=0; i<dropAmount; i++) {
 			
-				int size = rnd.Next (WATER_DROP_MIN, WATER_DROP_MAX);
+				int size = rnd.Next (dropMin, dropMax);
 				values [field.randomX (), field.randomY ()] = size;
 				
 			}
 			
 			// to some OK position
 			
-			for (int i=0; i<WATER_INIT_LIMIT; i++)
+			for (int i=0; i<initLimit; i++)
 				if (!PerformFlow ())
 					break;
 			
@@ -48,7 +71,7 @@ namespace Ants
 					
 					if (field.Validate (xd, yd)) {
 						
-						if (SurfaceLevel (x, y) > SurfaceLevel (xd, yd) + WATER_MAX_DELTA) {
+						if (SurfaceLevel (x, y) > SurfaceLevel (xd, yd) + maxDelta) {
 							
 							int delta = SurfaceLevel (x, y) - SurfaceLevel (xd, yd);
 							result.flowDirection [i, j] = delta;

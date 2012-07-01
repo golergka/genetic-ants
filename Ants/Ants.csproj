@@ -52,7 +52,7 @@
     <Compile Include="Geometry\MoveDirection.cs" />
     <Compile Include="Field\LookSystem.cs" />
     <Compile Include="Field\FieldSystem\FieldSystem.cs" />
-    <Compile Include="Field\FieldSystem\WaterSystem.cs" />
+    <Compile Include="Field\FieldSystem\FlowSystem.cs" />
     <Compile Include="Field\FieldSystem\Flow.cs" />
     <Compile Include="Field\VectorSystem.cs" />
   </ItemGroup>
@@ -63,7 +63,6 @@
     <Folder Include="Field\Objects\" />
     <Folder Include="Geometry\" />
     <Folder Include="Field\FieldSystem\" />
-    <Folder Include="Field\Flow\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Genetic\Genetic.csproj">

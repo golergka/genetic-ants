@@ -13,7 +13,7 @@ namespace Ants
 		// public int [,] water;
 		public int [,] grass;
 
-		public WaterSystem water;
+		public FlowSystem water;
 		
 		
 		
@@ -43,7 +43,7 @@ namespace Ants
 			// water = new int[xSize, ySize];
 			// GenerateWater ();
 
-			water = new WaterSystem(this);
+			water = new FlowSystem(this);
 			
 			// creating grass table
 			
@@ -201,125 +201,6 @@ namespace Ants
 		/*
 		 * Water
 		 */
-		
-		// const int WATER_DROP_AMOUNT = 10;
-		// const int WATER_DROP_MIN = 400;
-		// const int WATER_DROP_MAX = 500;
-		// const int WATER_INIT_LIMIT = 100;
-		// const int WATER_MAX_DELTA = 0;
-		
-		// private void GenerateWater ()
-		// {
-			
-		// 	for (int i=0; i<WATER_DROP_AMOUNT; i++) {
-			
-		// 		int size = rnd.Next (WATER_DROP_MIN, WATER_DROP_MAX);
-		// 		water [randomX (), randomY ()] = size;
-				
-		// 	}
-			
-		// 	for (int i=0; i<WATER_INIT_LIMIT; i++)
-		// 		if (!WaterFlow ())
-		// 			break;
-			
-		// }
-		
-		// private int SurfaceLevel (int x, int y)
-		// {
-		// 	return height [x, y] + water [x, y];
-		// }
-		
-		// private Flow CalculateFlowFrom (int x, int y)
-		// {
-		// 	Flow result = new Flow ();
-			
-		// 	for (int i=0; i<3; i++) {
-		// 		for (int j=0; j<3; j++) {
-					
-		// 			int xd = i + x - 1;
-		// 			int yd = j + y - 1;
-					
-		// 			if (Validate (xd, yd)) {
-						
-		// 				if (SurfaceLevel (x, y) > SurfaceLevel (xd, yd) + WATER_MAX_DELTA) {
-							
-		// 					int delta = SurfaceLevel (x, y) - SurfaceLevel (xd, yd);
-		// 					result.flowDirection [i, j] = delta;
-		// 					result.flowAmount = Math.Max (result.flowAmount, delta);
-							
-		// 				}
-						
-		// 			}
-					
-		// 		}
-		// 	}
-			
-		// 	return result;
-			
-		// }
-		
-		// // returns true if something flowed
-		// private bool PerformFlowFrom (int x, int y, Flow flow)
-		// {
-			
-		// 	bool result = false;
-		
-		// 	int[,] normalizedFlow = flow.NormalizedFlow ();
-			
-		// 	for (int i=0; i<3; i++) {
-		// 		for (int j=0; j<3; j++) {
-					
-		// 			int xd = i + x - 1;
-		// 			int yd = j + y - 1;
-					
-		// 			int flowThere = normalizedFlow [i, j];
-					
-		// 			if (flowThere > 0) {
-						
-		// 				result = true;
-		// 				water [xd, yd] += flowThere;
-		// 				water [x, y] -= flowThere;
-						
-		// 			}
-		// 		}
-		// 	}
-			
-		// 	return result;
-			
-		// }
-		
-		// private bool WaterFlow ()
-		// {
-			
-		// 	bool result = false;
-			
-		// 	Flow[,] flows = new Flow[xSize, ySize];
-			
-		// 	// calculating where the water will flow
-			
-		// 	for (int x=0; x<xSize; x++) {
-		// 		for (int y=0; y<ySize; y++) {
-		// 			if (water [x, y] > 0) {
-		// 				flows [x, y] = CalculateFlowFrom (x, y);
-		// 			}
-		// 		}
-		// 	}
-			
-		// 	// performing the water flow
-			
-		// 	for (int x=0; x<xSize; x++) {
-		// 		for (int y=0; y<ySize; y++) {
-		// 			if (water [x, y] > 0) {
-						
-		// 				result = result || PerformFlowFrom (x, y, flows [x, y]);
-						
-		// 			}
-		// 		}
-		// 	}
-			
-		// 	return result;
-			
-		// }
 		
 		public int WaterAt(int x, int y)
 		{
