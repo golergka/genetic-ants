@@ -1,16 +1,14 @@
 using System;
+using System.Collections.Generic;
 
 namespace Ants
 {
+
 	public class FlowSystem : FieldSystem
 	{
-		
+
 		// behavior configuration
 
-		private readonly int dropAmount;
-		private readonly int dropMin;
-		private readonly int dropMax;
-		private readonly int initLimit;
 		private readonly int maxDelta;
 
 		// default values of behavior configuration
@@ -23,18 +21,15 @@ namespace Ants
 		
 		public FlowSystem (
 			Field field,
+			PrintCharTable table,
 			int dropAmount = DROP_AMOUNT,
 			int dropMin = DROP_MIN,
 			int dropMax = DROP_MAX,
 			int initLimit = INIT_LIMIT,
 			int maxDelta = MAX_DELTA
-			) : base (field)
+			) : base (field, table)
 		{
 
-			this.dropAmount = dropAmount;
-			this.dropMin = dropMin;
-			this.dropMax = dropMax;
-			this.initLimit = initLimit;
 			this.maxDelta = maxDelta;
 			
 			// dropping initial shafts of water
@@ -159,30 +154,30 @@ namespace Ants
 			
 		}
 
-		override public void Buffer(char [][] printBuffer)
-		{
-			for (int x=0; x<xSize; x++) {
-				for (int y=0; y<ySize; y++) {
+		// override public void Buffer(char [][] printBuffer)
+		// {
+		// 	for (int x=0; x<xSize; x++) {
+		// 		for (int y=0; y<ySize; y++) {
 					
-					int w = values [x, y];
-					char c;
+		// 			int w = values [x, y];
+		// 			char c;
 					
-					if (w == 0)
-						continue;
-					else if (w < 3)
-						c = '-';
-					else if (w < 5)
-						c = '~';
-					else if (w < 7)
-						c = '=';
-					else
-						c = '#';
+		// 			if (w == 0)
+		// 				continue;
+		// 			else if (w < 3)
+		// 				c = '-';
+		// 			else if (w < 5)
+		// 				c = '~';
+		// 			else if (w < 7)
+		// 				c = '=';
+		// 			else
+		// 				c = '#';
 					
-					printBuffer [x][y] = c;
+		// 			printBuffer [x][y] = c;
 					
-				}
-			}
-		}
+		// 		}
+		// 	}
+		// }
 	}
 }
 

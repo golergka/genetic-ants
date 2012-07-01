@@ -4,6 +4,8 @@ namespace Ants
 {
 	public abstract class VectorSystem
 	{
+
+		protected const int INVALID_COORDINATES_RETURN = 0;
 		
 		public readonly int xSize;
 		public readonly int ySize;

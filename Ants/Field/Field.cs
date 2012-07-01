@@ -5,17 +5,16 @@ namespace Ants
 {
 	public class Field : VectorSystem
 	{
-		
-		private List<FieldObject> objects = new List<FieldObject>();
-		public readonly List<List<List<FieldObject>>> objectsOnField = new List<List<List<FieldObject>>>();
 
-		public int [,] height;
-		// public int [,] water;
+		// old vector systems
+
+		// public int [,] height;
 		public int [,] grass;
 
+		// new vector systems
+
 		public FlowSystem water;
-		
-		
+		public FlowSystem terrain;
 		
 		/*
 		 * Global
@@ -35,15 +34,41 @@ namespace Ants
 				
 			// creating height table
 			
-			height = new int[xSize, ySize];	
-			GenerateTerrain ();
+			PrintCharTable terrainPrintTable = new PrintCharTable();
+
+			terrainPrintTable.defaultLowChar = '.';
+			terrainPrintTable.printChars.Add(7, '^');
+			terrainPrintTable.defaultHiChar = '^';
+
+			terrain = new FlowSystem(
+				this,
+				terrainPrintTable,
+				TERRAIN_DROP_AMOUNT,
+				TERRAIN_DROP_MIN,
+				TERRAIN_DROP_MAX,
+				TERRAIN_INIT_LIMIT,
+				TERRAIN_MAX_DELTA
+				);
 			
 			// creating water
-			
-			// water = new int[xSize, ySize];
-			// GenerateWater ();
 
-			water = new FlowSystem(this);
+			PrintCharTable waterPrintTable = new PrintCharTable();
+
+			waterPrintTable.defaultLowChar = null;
+			waterPrintTable.printChars.Add(3, '-');
+			waterPrintTable.printChars.Add(5, '~');
+			waterPrintTable.printChars.Add(7, '=');
+			waterPrintTable.defaultHiChar = '#';
+
+			water = new FlowSystem(
+				this,
+				waterPrintTable,
+				WATER_DROP_AMOUNT,
+				WATER_DROP_MIN,
+				WATER_DROP_MAX,
+				WATER_INIT_LIMIT,
+				WATER_MAX_DELTA
+				);
 			
 			// creating grass table
 			
@@ -62,9 +87,10 @@ namespace Ants
 		{
 			
 			// water flows
-			// WaterFlow ();
-
 			water.Turn();
+
+			// notice — terrain doesn't turn!
+			// that's because we don't really want it to be flowing
 
 			// grass grows
 			GrassSpawn ();
@@ -89,6 +115,9 @@ namespace Ants
 		/*
 		 * Objects
 		 */
+
+		private List<FieldObject> objects = new List<FieldObject>();
+		public readonly List<List<List<FieldObject>>> objectsOnField = new List<List<List<FieldObject>>>();
 		
 		public List<FieldObject> ObjectsAt (int x, int y)
 		{
@@ -136,84 +165,44 @@ namespace Ants
 		const int TERRAIN_INIT_LIMIT = 100;
 		const int TERRAIN_MAX_DELTA = 3;
 		
-		private bool TerrainFlow ()
-		{
-			
-			bool result = false;
-		
-			for (int x=0; x<xSize; x++) {
-				for (int y=0; y<ySize; y++) {
-						
-					for (int i=x-1; i<x+1; i++) {
-						for (int j=y-1; j<y+1; j++) {
-								
-							if (Validate (i, j)) {
-								
-								if (height [i, j] < (height [x, y] - TERRAIN_MAX_DELTA)) {
-										
-									result = true;
-									int deltaLevel = (height [x, y] - height [i, j]) / 2;
-									height [x, y] -= deltaLevel;
-									height [i, j] += deltaLevel;
-										
-								}	
-							}		
-						}
-					}		
-				}
-			}
-			
-			return result;
-			
-		}
-		
-		private void GenerateTerrain ()
-		{
-			
-			// drop peaks
-			for (int i=0; i<TERRAIN_DROP_AMOUNT; i++)
-				height [randomX (), randomY ()] = rnd.Next (TERRAIN_DROP_MIN, TERRAIN_DROP_MAX);
-			
-			// smooth
-			
-			for (int i=0; i<TERRAIN_INIT_LIMIT; i++)
-				if (!TerrainFlow ())
-					break;
-			
-			
-		}
-		
 		public int HeightAt(int x, int y)
 		{
 			
-			if (this.Validate(x,y))
-				return height [x,y];
+			if (terrain != null)
+				return terrain.Value(x,y);
 			else
-				return 0;
+				return INVALID_COORDINATES_RETURN;
 			
 		}
 		
 		public int HeightAt (Point p)
 		{
-			return this.HeightAt(p.x, p.y);
+
+			return HeightAt(p.x, p.y);
+
 		}
 		
 		/*
 		 * Water
 		 */
+
+		const int WATER_DROP_AMOUNT = 10;
+		const int WATER_DROP_MIN = 400;
+		const int WATER_DROP_MAX = 500;
+		const int WATER_INIT_LIMIT = 100;
+		const int WATER_MAX_DELTA = 0;
 		
 		public int WaterAt(int x, int y)
 		{
-			if (Validate (x,y))
-				return water.Value(x,y);
-			else
-				return 0;
+			
+			return water.Value(x,y);
+			
 		}
 
 		public int WaterAt (Point p)
 		{
 			
-			return WaterAt(p.x, p.y);
+			return water.Value(p);
 
 		}
 		
@@ -278,26 +267,17 @@ namespace Ants
 		
 		private char[][] buffer;
 		
-		public void BufferHeight ()
+		public void BufferTerrain ()
 		{
 			
-			for (int x=0; x<xSize; x++) {
-				for (int y=0; y<ySize; y++) {
-					
-					if (height [x, y] > 7)
-						buffer [x][y] = '^';
-					else
-						buffer [x][y] = '.';
-					
-				}
-			}
+			terrain.Buffer(ref buffer);
 			
 		}
 		
 		public void BufferWater ()
 		{
 			
-			water.Buffer(buffer);
+			water.Buffer(ref buffer);
 			
 		}
 		
@@ -342,7 +322,7 @@ namespace Ants
 			
 			Console.Clear ();
 			
-			BufferHeight ();
+			BufferTerrain ();
 			BufferWater ();
 			BufferGrass ();
 			BufferObjets ();
